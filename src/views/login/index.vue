@@ -11,15 +11,15 @@
           <el-input
             v-model="LoginForm.code"
             placeholder="请输入验证码"
-            style="width:240px;margin-right:8px"
+            style="width:230px;margin-right:15px"
           ></el-input>
-          <el-button>发送验证码</el-button>
+          <el-button type="success">发送验证码</el-button>
         </el-form-item>
         <el-form-item>
           <el-checkbox :value="true">我已阅读并同意用户协议和隐私条款</el-checkbox>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:100%;">登录</el-button>
+          <el-button type="primary" style="width:100%">登录</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -58,7 +58,7 @@ export default {
     img {
       width: 200px;
       display: block;
-      margin: 0 auto;
+      margin: 0 auto 30px;
     }
   }
 }
