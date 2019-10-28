@@ -45,8 +45,11 @@
     </el-aside>
     <el-container>
       <el-header>
-        <span class="el-icon-s-fold" @click="toggleMenu"></span>
+        <!-- 图标 -->
+        <span class="el-icon-s-fold icon" @click="toggleMenu"></span>
+        <!-- 文字 -->
         <span class="text">江苏传智播客科技教育有限公司</span>
+        <!-- 下拉菜单组件 -->
         <el-dropdown :hide-on-click="false" class="dropdown">
           <span class="el-dropdown-link">
             <img class="headIcon" src="../../assets/avatar.jpg" alt />
@@ -60,6 +63,7 @@
         </el-dropdown>
       </el-header>
       <el-main>
+        <!-- 二级路由容器 -->
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -73,6 +77,7 @@ export default {
   },
   methods: {
     toggleMenu () {
+      // 切换左菜单 展开与收起
       this.isOpen = !this.isOpen
     }
   }

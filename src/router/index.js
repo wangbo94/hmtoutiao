@@ -2,23 +2,33 @@ import VueRouter from 'vue-router'
 import Vue from 'vue'
 import Login from '@/views/login'
 import Home from '@/views/home'
+import Welcome from '@/views/welcome'
 import NotFound from '@/views/404'
-// import Welcome from '@/views/welcome'
 
 Vue.use(VueRouter)
 export default new VueRouter({
-  routes: [{
-    path: '/login',
-    component: Login
-  }, {
-    path: '/',
-    component: Home
-    // children: [{
-    //   path: '/',
-    //   component: Welcome
-    // }]
-  }, {
-    path: '*',
-    component: NotFound
-  }]
+  routes: [
+    // 登录
+    {
+      path: '/login',
+      component: Login
+    },
+    // 首页
+    {
+      path: '/',
+      component: Home,
+      children: [
+        // 欢迎
+        {
+          path: '/',
+          component: Welcome
+        }
+      ]
+    },
+    // 匹配  不符合路由规则的路径
+    {
+      path: '*',
+      component: NotFound
+    }
+  ]
 })
