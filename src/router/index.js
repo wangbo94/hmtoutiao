@@ -4,9 +4,10 @@ import Login from '@/views/login'
 import Home from '@/views/home'
 import Welcome from '@/views/welcome'
 import NotFound from '@/views/404'
-
+import local from '@/utils/local'
 Vue.use(VueRouter)
-export default new VueRouter({
+
+const router = new VueRouter({
   routes: [
     // 登录
     {
@@ -32,3 +33,15 @@ export default new VueRouter({
     }
   ]
 })
+// 访问权限控制
+// 路由导航守卫
+router.beforeEach((to, from, next) => {
+  // to跳转的目标路由对象
+  // from从哪里跳过来的路由对象
+  // next() 放行
+  console.log(123)
+  const user = local.getUser()
+  if (to.path !== '/login' && !user) return next('/login')
+  next()
+})
+export default router
