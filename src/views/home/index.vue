@@ -3,7 +3,7 @@
     <el-aside :width="isOpen?'200px':'64px'">
       <div class="logo" :class="{smallLogo:!isOpen}"></div>
       <el-menu
-        default-active="/"
+        :default-active="$route.path"
         class="el-menu-vertical-demo"
         background-color="#002233"
         text-color="#fff"
