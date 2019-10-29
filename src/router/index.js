@@ -39,7 +39,6 @@ router.beforeEach((to, from, next) => {
   // to跳转的目标路由对象
   // from从哪里跳过来的路由对象
   // next() 放行
-  console.log(123)
   const user = local.getUser()
   if (to.path !== '/login' && !user) return next('/login')
   next()
