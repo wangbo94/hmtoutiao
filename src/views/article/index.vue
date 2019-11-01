@@ -16,14 +16,8 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道：">
-          <el-select v-model="reqParams.channel_id" placeholder="请选择">
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <!-- 频道插件--->
+          <my-channel v-model="reqParams.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="日期：">
           <el-date-picker
@@ -32,10 +26,12 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            @change="changeDate"
+            value-format="yyyy-MM-dd"
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">筛选</el-button>
+          <el-button type="primary" @click="search">筛选</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -66,9 +62,21 @@
         </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120px">
-          <template>
-            <el-button type="primary" icon="el-icon-edit" circle plain></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle plain></el-button>
+          <template slot-scope="scope">
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              plain
+              @click="toEdit(scope.row.id)"
+            ></el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              plain
+              @click="delArticle(scope.row.id)"
+            ></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -101,7 +109,7 @@ export default {
         page: 1,
         per_page: 20
       },
-      channelOptions: [],
+      // channelOptions: [],
       // 日期范围
       dataArr: [],
       articles: [],
@@ -111,17 +119,17 @@ export default {
   },
   // 从后台获取频道列表
   created () {
-    this.getChannelOptions()
+    // this.getChannelOptions()
     this.getArticles()
   },
   methods: {
     // 获取频道列表
-    async getChannelOptions () {
-      const {
-        data: { data }
-      } = await this.$http.get('channels')
-      this.channelOptions = data.channels
-    },
+    // async getChannelOptions () {
+    //   const {
+    //     data: { data }
+    //   } = await this.$http.get('channels')
+    //   this.channelOptions = data.channels
+    // },
     // 获取文章列表
     async getArticles () {
       const {
@@ -134,6 +142,37 @@ export default {
     pager (newPage) {
       // 修改当前的页面为新的页码||刷新文章列表
       this.reqParams.page = newPage
+      this.getArticles()
+    },
+    search () {
+      // 获取筛选数据（准备日期数据）
+      // 处理频道空字符串问题
+      if (this.reqParams.channel_id === '') this.reqParams.channel_id = null
+      this.reqParams.page = 1
+      this.getArticles()
+    },
+    // 选择日期
+    changeDate (dateArr) {
+      // dateArr是数组[date,date]起始时间 结束时间 获取到的数据是newDate()格式的，要转化为yyyy-MM-dd
+      // 通过element-ui 提供的方法value-form='yyyy-MM-dd'
+      if (dateArr) {
+        this.reqParams.begin_pubdate = dateArr[0]
+        this.reqParams.end_pubdate = dateArr[1]
+      } else {
+        this.reqParams.begin_pubdate = null
+        this.reqParams.end_pubdate = null
+      }
+    },
+    // 点击编辑，跳转到发布文章
+    toEdit (id) {
+      // 第一种
+      // this.$router.push(`/public?id=${id}`)
+      // 第二种：当参数为对象时方便传参
+      this.$router.push({ path: '/public', query: { id } })
+    },
+    async delArticle (id) {
+      await this.$http.delete(`articles/${id}`)
+      this.$message.success('删除成功')
       this.getArticles()
     }
   }
