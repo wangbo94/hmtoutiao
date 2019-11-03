@@ -6,7 +6,7 @@ import Welcome from '@/views/welcome'
 import NotFound from '@/views/404'
 import local from '@/utils/local'
 import Article from '@/views/article'
-// import Images from '@/views/image'
+import Images from '@/views/image'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -29,11 +29,11 @@ const router = new VueRouter({
         {
           path: '/article',
           component: Article
+        },
+        {
+          path: '/image',
+          component: Images
         }
-        // {
-        //   path: '/image',
-        //   component: Images
-        // }
       ]
     },
     // 匹配  不符合路由规则的路径
