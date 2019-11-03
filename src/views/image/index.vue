@@ -9,7 +9,7 @@
           <el-radio-button :label="false">全部</el-radio-button>
           <el-radio-button :label="true">收藏</el-radio-button>
         </el-radio-group>
-        <el-button type="success" size="small" style="float:right" @click="dialogVisible=true">添加素材</el-button>
+        <el-button type="success" size="small" style="float:right" @click="open">添加素材</el-button>
       </div>
       <!-- 图片列表--->
       <div class="img_list">
@@ -36,21 +36,28 @@
     </el-card>
     <!-- 对话框 -->
     <el-dialog title="添加素材" :visible.sync="dialogVisible" width="300px">
-      <span>
-        <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :show-file-list="false"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-      </span>
+      <!--
+          action 是上传图片的地址
+          headers 上传组件的请求头
+      -->
+      <el-upload
+        class="avatar-uploader"
+        action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+        :headers="headers"
+        name="image"
+        :on-success="handleSuccess"
+        :show-file-list="false"
+      >
+        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
     </el-dialog>
   </div>
 </template>
 
 <script>
+// eslint-disable-next-line semi
+import local from '@/utils/local';
 export default {
   data () {
     return {
@@ -60,9 +67,14 @@ export default {
         per_page: 10
       },
       images: [],
+      // 控制对话框显示与隐藏
       dialogVisible: false,
       total: 0,
-      imageUrl: null
+      // 上传成功后的图片地址
+      imageUrl: null,
+      headers: {
+        Authorization: `Bearer ${local.getUser().token}`
+      }
     }
   },
   created () {
@@ -112,6 +124,22 @@ export default {
           this.getImages()
         })
         .catch(() => {})
+    },
+    // 上传图片成功
+    handleSuccess (res) {
+      // res就是响应主体，res.data.url就是图片地址
+      this.imageUrl = res.data.url
+      //   提示
+      this.$message.success('上传成功')
+      window.setTimeout(() => {
+        // 2s之后关闭页面
+        this.dialogVisible = false
+        this.getImages()
+      }, 2000)
+    },
+    open () {
+      this.dialogVisible = true
+      this.imageUrl = null
     }
   }
 }
