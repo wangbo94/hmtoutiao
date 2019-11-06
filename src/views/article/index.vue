@@ -168,7 +168,7 @@ export default {
       // 第一种
       // this.$router.push(`/public?id=${id}`)
       // 第二种：当参数为对象时方便传参
-      this.$router.push({ path: '/public', query: { id } })
+      this.$router.push({ path: '/publish', query: { id } })
     },
     async delArticle (id) {
       await this.$http.delete(`articles/${id}`)
