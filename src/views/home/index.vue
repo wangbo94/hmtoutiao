@@ -71,7 +71,10 @@
 </template>
 
 <script>
-import local from '@/utils/local'
+// eslint-disable-next-line semi
+import local from '@/utils/local';
+// eslint-disable-next-line semi
+import eventBus from '@/eventBus';
 export default {
   data () {
     return { isOpen: true, photo: '', name: '' }
@@ -80,6 +83,12 @@ export default {
     const user = local.getUser() || {}
     this.photo = user.photo
     this.name = user.name
+    eventBus.$on('updateName', name => {
+      this.name = name
+    })
+    eventBus.$on('updatePhoto', photo => {
+      this.photo = photo
+    })
   },
   methods: {
     toggleMenu () {
@@ -96,9 +105,7 @@ export default {
     handleclick (command) {
       this[command]()
     }
-
   }
-
 }
 </script>
 
